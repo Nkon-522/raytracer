@@ -2,20 +2,22 @@
 #define RAYTRACER_APP_H
 
 #define SDL_MAIN_HANDLED
+
 #include <SDL.h>
+
+#if !SDL_VERSION_ATLEAST(2,0,17)
+#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
+#endif
 
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
 #include <iostream>
-
-#include <image/image.h>
 #include <memory>
 
-#if !SDL_VERSION_ATLEAST(2,0,17)
-#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
-#endif
+#include "image/image.h"
+#include "utilities/timer.h"
 
 class App {
 private:
@@ -25,8 +27,8 @@ private:
     SDL_Window* window = nullptr;
 
     // Window variables
-    const int WINDOW_HEIGHT = 480;
     const int WINDOW_WIDTH = 640;
+    const int WINDOW_HEIGHT = 480;
     const std::string TITLE = "Raytracer";
     const SDL_WindowFlags WINDOW_FLAGS = static_cast<SDL_WindowFlags>(
             SDL_WINDOW_RESIZABLE |
@@ -52,9 +54,8 @@ private:
 
     // App variables
     bool run{true};
-
+    Timer timer{};
     SDL_Event event{};
-    // Our state
     ImVec4 clear_color{0.45f, 0.55f, 0.60f, 1.00f};
 
     // Raytracer variables

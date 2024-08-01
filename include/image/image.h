@@ -8,10 +8,6 @@
 using color = vec3;
 
 class Image {
-public:
-    // Image parameters
-    static const int IMAGE_WIDTH = 256;
-    static const int IMAGE_HEIGHT = 300;
 
 private:
     std::vector<std::uint32_t> img;
@@ -30,8 +26,12 @@ private:
         std::uint32_t abyte = 255;
         img[index] = (rbyte << 24U) | (gbyte << 16U) | (bbyte << 8U) | abyte;
     }
-
 public:
+
+    // Image parameters
+    static const int IMAGE_WIDTH = 640;
+    static const int IMAGE_HEIGHT = 480;
+
     Image() {
         img = std::vector<std::uint32_t>(IMAGE_WIDTH*IMAGE_HEIGHT, 0U);
     }
@@ -46,7 +46,7 @@ public:
         }
     }
 
-    [[nodiscard]] const std::vector<std::uint32_t> &getImg() const {
+    [[nodiscard]] const std::vector<std::uint32_t>& getImg() const {
         return img;
     }
 };

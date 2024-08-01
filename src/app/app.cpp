@@ -86,7 +86,10 @@ void App::handle_events() {
 
 void App::update() {
     // Update image
+    timer.start();
     image.render();
+    timer.stop();
+
     // Update texture
     if (SDL_UpdateTexture(texture, nullptr, image.getImg().data(), Image::IMAGE_WIDTH * sizeof(std::uint32_t)) != 0) {
         throw std::runtime_error("Error: SDL_UpdateTexture(): " + std::string(SDL_GetError())+"\n");
@@ -100,10 +103,15 @@ void App::set_render_ImGui() {
     ImGui::NewFrame();
 
     {
-        ImGui::Begin("Camara parameters");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Begin("Raytracer parameters");
 
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+        ImGui::ColorEdit3("clear color", (float*)&clear_color);
 
+        if (ImGui::Button("Render")) {
+            update();
+        }
+
+        ImGui::Text("Time to preview render %.3f ms", timer.elapsedMilliseconds());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
         ImGui::End();
     }
