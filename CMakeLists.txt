@@ -3,10 +3,7 @@ project(raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(raytracer
-        include/app/app.h
-        include/image/image.h
-        include/utilities/vec3.h)
+add_executable(raytracer)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/ext)
 add_subdirectory(${CMAKE_SOURCE_DIR}/include)

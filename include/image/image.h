@@ -11,7 +11,7 @@ class Image {
 public:
     // Image parameters
     static const int IMAGE_WIDTH = 256;
-    static const int IMAGE_HEIGHT = 256;
+    static const int IMAGE_HEIGHT = 300;
 
 private:
     std::vector<std::uint32_t> img;
