@@ -16,8 +16,8 @@
 #include <iostream>
 #include <memory>
 
-#include "image/image.h"
 #include "utilities/timer.h"
+#include "raytracer/raytracer.h"
 
 class App {
 private:
@@ -59,10 +59,9 @@ private:
     ImVec4 clear_color{0.45f, 0.55f, 0.60f, 1.00f};
 
     // Raytracer variables
-    Image image{};
+    Raytracer raytracer{};
     // Destination rectangle for image
-    SDL_Rect dstRect{0, 0, Image::IMAGE_WIDTH, Image::IMAGE_HEIGHT};
-
+    SDL_Rect dstRect{0, 0, Image::getImageWidth(), Image::getImageHeight()};
 
     // INITIALIZATION
     void init_sdl();

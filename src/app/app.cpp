@@ -23,7 +23,7 @@ void App::init_sdl() {
         throw std::runtime_error("Error creating SDL_Renderer!");
     }
 
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Image::IMAGE_WIDTH, Image::IMAGE_HEIGHT);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Image::getImageWidth(), Image::getImageHeight());
 }
 
 void App::init_ImGui() {
@@ -87,11 +87,11 @@ void App::handle_events() {
 void App::update() {
     // Update image
     timer.start();
-    image.render();
+    raytracer.render_preview();
     timer.stop();
 
     // Update texture
-    if (SDL_UpdateTexture(texture, nullptr, image.getImg().data(), Image::IMAGE_WIDTH * sizeof(std::uint32_t)) != 0) {
+    if (SDL_UpdateTexture(texture, nullptr, raytracer.getPreviewImage().data(), static_cast<int>((Image::getImageWidth()) * sizeof(std::uint32_t))) != 0) {
         throw std::runtime_error("Error: SDL_UpdateTexture(): " + std::string(SDL_GetError())+"\n");
     }
 }
@@ -106,6 +106,9 @@ void App::set_render_ImGui() {
         ImGui::Begin("Raytracer parameters");
 
         ImGui::ColorEdit3("clear color", (float*)&clear_color);
+
+        ImGui::Text("Image width: %d", Image::getImageWidth());
+        ImGui::Text("Image height: %d", Image::getImageHeight());
 
         if (ImGui::Button("Render")) {
             update();
