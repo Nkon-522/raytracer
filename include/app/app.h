@@ -27,8 +27,8 @@ private:
     SDL_Window* window = nullptr;
 
     // Window variables
-    const int WINDOW_WIDTH = 640;
-    const int WINDOW_HEIGHT = 480;
+    const int WINDOW_WIDTH = 1080;
+    const int WINDOW_HEIGHT = 620;
     const std::string TITLE = "Raytracer";
     const SDL_WindowFlags WINDOW_FLAGS = static_cast<SDL_WindowFlags>(
             SDL_WINDOW_RESIZABLE |

@@ -30,8 +30,20 @@ private:
 
 public:
 
-    static point3 getPixel00Location() {
-        return pixel00_loc;
+    static float getViewportHeight() {
+        return viewport_height;
+    }
+
+    static float getViewportWidth() {
+        return viewport_width;
+    }
+
+    static const vec3 &getViewportU() {
+        return viewport_u;
+    }
+
+    static const vec3 &getViewportV() {
+        return viewport_v;
     }
 
     static vec3 getPixelDeltaU() {
@@ -40,6 +52,14 @@ public:
 
     static vec3 getPixelDeltaV() {
         return pixel_delta_v;
+    }
+
+    static const point3 &getViewportUpperLeft() {
+        return viewport_upper_left;
+    }
+
+    static point3 getPixel00Location() {
+        return pixel00_loc;
     }
 
     static void recalibrate() {

@@ -3,8 +3,7 @@ project(raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(raytracer
-        include/raytracer/raytracer.h)
+add_executable(raytracer)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/ext)
 add_subdirectory(${CMAKE_SOURCE_DIR}/include)

@@ -1,10 +1,7 @@
 #ifndef RAYTRACER_VEC3_H
 #define RAYTRACER_VEC3_H
 
-#include <cmath>
-#include <iostream>
-
-using std::sqrt;
+#include "cmath"
 
 class vec3 {
 public:
@@ -40,7 +37,7 @@ public:
     }
 
     [[nodiscard]] float length() const {
-        return sqrt(length_squared());
+        return std::sqrt(length_squared());
     }
 
     [[nodiscard]] float length_squared() const {

@@ -107,8 +107,44 @@ void App::set_render_ImGui() {
 
         ImGui::ColorEdit3("clear color", (float*)&clear_color);
 
+        ImGui::Text("IMAGE PARAMETERS");
         ImGui::Text("Image width: %d", Image::getImageWidth());
         ImGui::Text("Image height: %d", Image::getImageHeight());
+
+        ImGui::Text(""); ImGui::Text("CAMERA PARAMETERS");
+        ImGui::Text("Focal Length: %.3f", Camera::getFocalLength());
+        ImGui::Text("Camera Center: point3(%.3f, %.3f, %.3f)",
+                    Camera::getCameraCenter().x(),
+                    Camera::getCameraCenter().y(),
+                    Camera::getCameraCenter().z());
+
+        ImGui::Text(""); ImGui::Text("VIEWPORT PARAMETERS");
+        ImGui::Text("Viewport height: %.3f", Viewport::getViewportHeight());
+        ImGui::Text("Viewport width: %.3f", Viewport::getViewportWidth());
+        ImGui::Text("Viewport U: vec3(%.3f, %.3f, %.3f)",
+                    Viewport::getViewportU().x(),
+                    Viewport::getViewportU().y(),
+                    Viewport::getViewportU().z());
+        ImGui::Text("Viewport V: vec3(%.3f, %.3f, %.3f)",
+                    Viewport::getViewportV().x(),
+                    Viewport::getViewportV().y(),
+                    Viewport::getViewportV().z());
+        ImGui::Text("Pixel Delta U: vec3(%.3f, %.3f, %.3f)",
+                    Viewport::getPixelDeltaU().x(),
+                    Viewport::getPixelDeltaU().y(),
+                    Viewport::getPixelDeltaU().z());
+        ImGui::Text("Pixel Delta V: vec3(%.3f, %.3f, %.3f)",
+                    Viewport::getPixelDeltaV().x(),
+                    Viewport::getPixelDeltaV().y(),
+                    Viewport::getPixelDeltaV().z());
+        ImGui::Text("Viewport Upper Left: point3(%.3f, %.3f, %.3f)",
+                    Viewport::getViewportUpperLeft().x(),
+                    Viewport::getViewportUpperLeft().y(),
+                    Viewport::getViewportUpperLeft().z());
+        ImGui::Text("Viewport Pixel 00 Location: point3(%.3f, %.3f, %.3f)",
+                    Viewport::getPixel00Location().x(),
+                    Viewport::getPixel00Location().y(),
+                    Viewport::getPixel00Location().z());
 
         if (ImGui::Button("Render")) {
             update();
