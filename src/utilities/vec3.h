@@ -1,7 +1,8 @@
 #ifndef RAYTRACER_VEC3_H
 #define RAYTRACER_VEC3_H
 
-#include "cmath"
+#include <cmath>
+#include <iostream>
 
 class vec3 {
 public:
@@ -47,7 +48,6 @@ public:
 
 // point3 is just an alias for vec3, but useful for geometric clarity in the code.
 using point3 = vec3;
-
 
 // Vector Utility Functions
 

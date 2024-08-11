@@ -1,5 +1,39 @@
 #include "app/app.h"
 
+//CONSTRUCTOR
+App::App():
+    window{nullptr},
+    WINDOW_WIDTH{1080},
+    WINDOW_HEIGHT{620},
+    TITLE{"Raytracer"},
+    WINDOW_FLAGS{ static_cast<SDL_WindowFlags>(
+            SDL_WINDOW_RESIZABLE |
+            SDL_WINDOW_ALLOW_HIGHDPI
+        )
+    },
+    renderer{nullptr},
+    RENDERER_FLAGS{ static_cast<SDL_RendererFlags>(
+            SDL_RENDERER_PRESENTVSYNC |
+            SDL_RENDERER_ACCELERATED
+        )
+    },
+    texture{nullptr},
+    io{nullptr},
+    ImGui_FLAGS{ static_cast<ImGuiConfigFlags>(
+             ImGuiConfigFlags_NavEnableKeyboard |    // Enable Keyboard Controls
+             ImGuiConfigFlags_NavEnableGamepad       // Enable Gamepad Controls
+         )
+    },
+    run{true},
+    timer{},
+    event{},
+    clear_color{0.45f, 0.55f, 0.60f, 1.00f},
+    raytracer{},
+    dstRect{0, 0, Image::getImageWidth(), Image::getImageHeight()}
+{
+    this->init();
+}
+
 // INITIALIZATION
 void App::init_sdl() {
     // Initialize SDL
@@ -72,7 +106,21 @@ void App::terminate() const {
     terminate_sdl();
 }
 
+// DESTRUCTOR
+App::~App() {
+    terminate();
+}
+
 // EXECUTION
+void App::execute() {
+    // Main loop
+    while (run) {
+        handle_events();
+        update();
+        render();
+    }
+}
+
 void App::handle_events() {
     // Handle events
     while (SDL_PollEvent(&event)) {
@@ -174,5 +222,11 @@ void App::render() {
     // Update Screen with Render
     SDL_RenderPresent(renderer);
 }
+
+
+
+
+
+
 
 
