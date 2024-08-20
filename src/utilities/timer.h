@@ -15,7 +15,7 @@ public:
         m_bRunning = false;
     }
 
-    double elapsedMilliseconds() {
+    [[nodiscard]] double elapsedMilliseconds() const {
         std::chrono::time_point<std::chrono::system_clock> endTime;
 
         if(m_bRunning) {
@@ -28,7 +28,7 @@ public:
         return static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>((endTime - m_StartTime)).count());
     }
 
-    [[maybe_unused]] double elapsedSeconds() {
+    [[maybe_unused]] [[nodiscard]] double elapsedSeconds() const {
         return elapsedMilliseconds() / 1000.0;
     }
 

@@ -36,8 +36,8 @@ void Raytracer::render_preview() {
             // Pixel to evaluate
             auto pixel_center =
                     Viewport::getPixel00Location()
-                    + (float(i) * Viewport::getPixelDeltaV())
-                    + (float(j) * Viewport::getPixelDeltaU());
+                    + (static_cast<float>(i) * Viewport::getPixelDeltaV())
+                    + (static_cast<float>(j) * Viewport::getPixelDeltaU());
             // Direction from camera to evaluated pixel
             auto ray_direction =
                     pixel_center
@@ -54,13 +54,12 @@ void Raytracer::render_preview() {
 }
 
 
-color Raytracer::ray_color(const ray &r) {
-    hit_record rec;
-    if (world.hit(r, interval(0, infinity), rec)) {
+color Raytracer::ray_color(const ray &r) const {
+    if (hit_record rec; world.hit(r, interval(0, infinity), rec)) {
         return 0.5 * (rec.normal + color(1,1,1));
     }
 
-    vec3 unit_direction = unit_vector(r.direction());
-    float a = 0.5f * float(unit_direction.y() + 1.0);
+    const vec3 unit_direction = unit_vector(r.direction());
+    const float a = 0.5f * static_cast<float>(unit_direction.y() + 1.0);
     return (1.0f-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }

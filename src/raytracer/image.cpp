@@ -49,18 +49,22 @@ void Image::initialize() {
 void Image::setup(const SetupType& type) {
     switch (type) {
         case SetupType::IMAGE_HEIGHT:
-            setImageHeight(int(float(image_width)/aspect_ratio) < 1? 1: int(float(image_width)/aspect_ratio));
+            setImageHeight(
+                static_cast<int>(static_cast<float>(image_width) / aspect_ratio) < 1? 1: static_cast<int>(static_cast<float>(image_width) / aspect_ratio)
+                );
             break;
         case SetupType::IMAGE_WIDTH:
-            setImageWidth(int(float(image_height)/aspect_ratio) < 1? 1: int(float(image_height)/aspect_ratio));
+            setImageWidth(
+                static_cast<int>(static_cast<float>(image_height) / aspect_ratio) < 1? 1: static_cast<int>(static_cast<float>(image_height) / aspect_ratio)
+                );
             break;
     }
 }
 
 void Image::write_color(const int &index, const color &pixel_color) {
-    auto r = pixel_color.x();
-    auto g = pixel_color.y();
-    auto b = pixel_color.z();
+    const auto r = pixel_color.x();
+    const auto g = pixel_color.y();
+    const auto b = pixel_color.z();
     // Translate the [0,1] component values to the byte range [0,255].
     const auto red_byte = static_cast<std::uint32_t>(255.999 * r);
     const auto green_byte = static_cast<std::uint32_t>(255.999 * g);

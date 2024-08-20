@@ -21,7 +21,7 @@ private:
     static void initialize();
     void setup_scene();
 
-    color ray_color(const ray& r);
+    [[nodiscard]] color ray_color(const ray& r) const;
 public:
     Raytracer();
     [[nodiscard]] const std::vector<std::uint32_t> &getPreviewImage() const;

@@ -3,7 +3,7 @@
 
 #include "hittable.h"
 
-class sphere : public hittable {
+class sphere final : public hittable {
 private:
     point3 center;
     float radius;

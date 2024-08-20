@@ -153,7 +153,7 @@ void App::set_render_ImGui() {
     {
         ImGui::Begin("Raytracer parameters");
 
-        ImGui::ColorEdit3("clear color", (float*)&clear_color);
+        ImGui::ColorEdit3("clear color", reinterpret_cast<float *>(&clear_color));
 
         ImGui::Text("IMAGE PARAMETERS");
         ImGui::Text("Image width: %d", Image::getImageWidth());

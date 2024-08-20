@@ -99,8 +99,8 @@ void Viewport::setup(const Viewport::SetupType &type) {
     }
     setViewportU({viewport_width, 0, 0});
     setViewportV({0, -viewport_height, 0});
-    setPixelDeltaU(viewport_u / float(Image::getImageWidth()));
-    setPixelDeltaV(viewport_v / float(Image::getImageHeight()));
+    setPixelDeltaU(viewport_u / static_cast<float>(Image::getImageWidth()));
+    setPixelDeltaV(viewport_v / static_cast<float>(Image::getImageHeight()));
 
     setViewportUpperLeft(
         Camera::getCameraCenter()
