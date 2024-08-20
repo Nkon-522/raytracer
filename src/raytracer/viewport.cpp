@@ -91,10 +91,10 @@ void Viewport::initialize() {
 void Viewport::setup(const Viewport::SetupType &type) {
     switch (type) {
         case SetupType::VIEWPORT_HEIGHT:
-            setViewportHeight(viewport_width * ((float) Image::getImageHeight())/ (float) Image::getImageWidth());
+            setViewportHeight(viewport_width * static_cast<float>(Image::getImageHeight())/ static_cast<float>(Image::getImageWidth()));
             break;
         case SetupType::VIEWPORT_WIDTH:
-            setViewportWidth(viewport_height * ((float) Image::getImageWidth())/ (float) Image::getImageHeight());
+            setViewportWidth(viewport_height * static_cast<float>(Image::getImageWidth())/ static_cast<float>(Image::getImageHeight()));
             break;
     }
     setViewportU({viewport_width, 0, 0});
@@ -102,7 +102,7 @@ void Viewport::setup(const Viewport::SetupType &type) {
     setPixelDeltaU(viewport_u / float(Image::getImageWidth()));
     setPixelDeltaV(viewport_v / float(Image::getImageHeight()));
 
-    Viewport::setViewportUpperLeft(
+    setViewportUpperLeft(
         Camera::getCameraCenter()
         - vec3{0.0f, 0.0f, Camera::getFocalLength()}
         - viewport_u / 2

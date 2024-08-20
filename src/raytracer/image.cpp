@@ -61,14 +61,13 @@ void Image::write_color(const int &index, const color &pixel_color) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();
-
     // Translate the [0,1] component values to the byte range [0,255].
-    auto red_byte = std::uint32_t(255.999 * r);
-    auto green_byte = std::uint32_t(255.999 * g);
-    auto blue_byte = std::uint32_t(255.999 * b);
+    const auto red_byte = static_cast<std::uint32_t>(255.999 * r);
+    const auto green_byte = static_cast<std::uint32_t>(255.999 * g);
+    const auto blue_byte = static_cast<std::uint32_t>(255.999 * b);
 
     // Write out the pixel color components.
-    std::uint32_t alpha_byte = 255;
+    constexpr std::uint32_t alpha_byte = 255;
     img[index] = (red_byte << 24U) | (green_byte << 16U) | (blue_byte << 8U) | alpha_byte;
 }
 

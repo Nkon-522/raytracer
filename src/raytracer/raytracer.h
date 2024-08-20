@@ -19,11 +19,6 @@ private:
     hittable_list world;
 
     static void initialize();
-    inline static const int init = [] {
-        initialize();
-        return 1;
-    }();
-
     void setup_scene();
 
     color ray_color(const ray& r);

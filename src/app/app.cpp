@@ -210,7 +210,12 @@ void App::render() {
     // Setup Render
     set_render_ImGui();
     SDL_RenderSetScale(renderer, io->DisplayFramebufferScale.x, io->DisplayFramebufferScale.y);
-    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_SetRenderDrawColor(renderer,
+        static_cast<Uint8>(clear_color.x * 255),
+        static_cast<Uint8>(clear_color.y * 255),
+        static_cast<Uint8>(clear_color.z * 255),
+        static_cast<Uint8>(clear_color.w * 255)
+        );
 
     // Clear Render
     SDL_RenderClear(renderer);

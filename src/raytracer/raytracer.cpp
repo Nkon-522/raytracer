@@ -3,6 +3,7 @@
 // CONSTRUCTOR
 
 Raytracer::Raytracer() {
+    initialize();
     preview_image = Image{};
     image = Image{};
     setup_scene();
@@ -37,7 +38,6 @@ void Raytracer::render_preview() {
                     Viewport::getPixel00Location()
                     + (float(i) * Viewport::getPixelDeltaV())
                     + (float(j) * Viewport::getPixelDeltaU());
-
             // Direction from camera to evaluated pixel
             auto ray_direction =
                     pixel_center
@@ -46,7 +46,6 @@ void Raytracer::render_preview() {
             // Ray directed to pixel
             ray r(Camera::getCameraCenter(), ray_direction);
             color pixel_color = ray_color(r);
-
             // Color the pixel
             int index = i*Image::getImageWidth() + j;
             preview_image.write_color(index, pixel_color);
