@@ -33,19 +33,13 @@ void Raytracer::setup_scene() {
 void Raytracer::render_preview() {
     for (int i = 0; i < Image::getImageHeight(); ++i) {
         for (int j = 0; j < Image::getImageWidth(); ++j) {
-            // Pixel to evaluate
-            auto pixel_center =
-                    Viewport::getPixel00Location()
-                    + (static_cast<float>(i) * Viewport::getPixelDeltaV())
-                    + (static_cast<float>(j) * Viewport::getPixelDeltaU());
-            // Direction from camera to evaluated pixel
-            auto ray_direction =
-                    pixel_center
-                    - Camera::getCameraCenter();
+            color pixel_color{0,0,0};
+            for (int sample = 0; sample < Image::getSamplesPerPixel(); ++sample) {
+                ray sampling_ray_direction = get_sampling_ray(i, j);
+                pixel_color += ray_color(sampling_ray_direction);
+            }
+            pixel_color /= static_cast<float>(Image::getSamplesPerPixel());
 
-            // Ray directed to pixel
-            ray r(Camera::getCameraCenter(), ray_direction);
-            color pixel_color = ray_color(r);
             // Color the pixel
             int index = i*Image::getImageWidth() + j;
             preview_image.write_color(index, pixel_color);
@@ -62,4 +56,26 @@ color Raytracer::ray_color(const ray &r) const {
     const vec3 unit_direction = unit_vector(r.direction());
     const float a = 0.5f * static_cast<float>(unit_direction.y() + 1.0);
     return (1.0f-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
+}
+
+ray Raytracer::get_sampling_ray(const int &i, const int &j) {
+    // Construct a camera ray originating from the origin and directed at randomly sampled
+    // point around the pixel location i, j.
+
+    // Random point in the [-.5,-.5]-[+.5,+.5] unit square.
+    const auto offset = vec3(random_float() - 0.5f, random_float() - 0.5f, 0);
+
+    // Pixel to evaluate
+    const auto pixel_sample =
+            Viewport::getPixel00Location()
+            + ((static_cast<float>(i) + offset.y()) * Viewport::getPixelDeltaV())
+            + ((static_cast<float>(j) + offset.x()) * Viewport::getPixelDeltaU());
+
+    // Direction from camera to evaluated pixel
+    auto ray_direction =
+            pixel_sample
+            - Camera::getCameraCenter();
+
+    // Ray directed to pixel
+    return {Camera::getCameraCenter(), ray_direction};
 }

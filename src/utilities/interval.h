@@ -3,24 +3,30 @@
 
 #include "utils.h"
 
+#include <algorithm>
+
 class interval {
 public:
     float min, max;
 
     interval() : min{+infinity}, max{-infinity} {} // Default interval is empty
 
-    interval(float min, float max) : min{min}, max{max} {}
+    interval(const float min, const float max) : min{min}, max{max} {}
 
     [[nodiscard]] float size() const {
         return max - min;
     }
 
-    [[nodiscard]] bool contains(float x) const {
+    [[nodiscard]] bool contains(const float& x) const {
         return min <= x && x <= max;
     }
 
-    [[nodiscard]] bool surrounds(float x) const {
+    [[nodiscard]] bool surrounds(const float& x) const {
         return min < x && x < max;
+    }
+
+    [[nodiscard]] float clamp(const float& x) const {
+        return std::clamp(x, min, max);
     }
 
     static const interval empty, universe;

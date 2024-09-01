@@ -1,8 +1,10 @@
 # include "image.h"
 
+
 float Image::aspect_ratio{};
 int Image::image_width{};
 int Image::image_height{};
+int Image::samples_per_pixel{};
 
 // CONSTRUCTOR
 Image::Image():img{std::vector<std::uint32_t>(image_width*image_height, 0U)} {}
@@ -27,21 +29,30 @@ int Image::getImageHeight() {
     return image_height;
 }
 
-void Image::setImageWidth(int imageWidth) {
+int Image::getSamplesPerPixel() {
+    return samples_per_pixel;
+}
+
+void Image::setImageWidth(const int imageWidth) {
     image_width = imageWidth;
 }
 
-void Image::setImageHeight(int imageHeight) {
+void Image::setImageHeight(const int imageHeight) {
     image_height = imageHeight;
 }
 
-void Image::setAspectRatio(float aspectRatio) {
+void Image::setAspectRatio(const float aspectRatio) {
     aspect_ratio = aspectRatio;
+}
+
+void Image::setSamplesPerPixel(const int samplesPerPixel) {
+    samples_per_pixel = samplesPerPixel;
 }
 
 void Image::initialize() {
     setAspectRatio(16.0 / 9.0);
     setImageWidth(400);
+    setSamplesPerPixel(10);
     setup(SetupType::IMAGE_HEIGHT);
 }
 
@@ -65,10 +76,12 @@ void Image::write_color(const int &index, const color &pixel_color) {
     const auto r = pixel_color.x();
     const auto g = pixel_color.y();
     const auto b = pixel_color.z();
+
     // Translate the [0,1] component values to the byte range [0,255].
-    const auto red_byte = static_cast<std::uint32_t>(255.999 * r);
-    const auto green_byte = static_cast<std::uint32_t>(255.999 * g);
-    const auto blue_byte = static_cast<std::uint32_t>(255.999 * b);
+    static const interval intensity(0.000, 0.999);
+    const auto red_byte = static_cast<std::uint32_t>(256 * intensity.clamp(r));
+    const auto green_byte = static_cast<std::uint32_t>(256 * intensity.clamp(g));
+    const auto blue_byte = static_cast<std::uint32_t>(256 * intensity.clamp(b));
 
     // Write out the pixel color components.
     constexpr std::uint32_t alpha_byte = 255;
