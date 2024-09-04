@@ -61,7 +61,8 @@ private:
 
     // EXECUTION
     void handle_events();
-    void update();
+    void update() const;
+    void raytrace();
     void set_render_ImGui();
     void render();
 

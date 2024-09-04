@@ -49,8 +49,10 @@ void Raytracer::render_preview() {
 
 
 color Raytracer::ray_color(const ray &r) const {
+
     if (hit_record rec; world.hit(r, interval(0, infinity), rec)) {
-        return 0.5 * (rec.normal + color(1,1,1));
+        const vec3 direction = random_on_hemisphere(rec.normal);
+        return 0.4 * ray_color(ray(rec.p, direction));
     }
 
     const vec3 unit_direction = unit_vector(r.direction());

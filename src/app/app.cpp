@@ -132,12 +132,16 @@ void App::handle_events() {
     }
 }
 
-void App::update() {
+void App::raytrace() {
     // Update image
     timer.start();
     raytracer.render_preview();
     timer.stop();
 
+}
+
+
+void App::update() const {
     // Update texture
     if (SDL_UpdateTexture(texture, nullptr, raytracer.getPreviewImage().data(), static_cast<int>((Image::getImageWidth()) * sizeof(std::uint32_t))) != 0) {
         throw std::runtime_error("Error: SDL_UpdateTexture(): " + std::string(SDL_GetError())+"\n");
@@ -195,7 +199,7 @@ void App::set_render_ImGui() {
                     Viewport::getPixel00Location().z());
 
         if (ImGui::Button("Render")) {
-            update();
+            raytrace();
         }
 
         ImGui::Text("Time to preview render %.3f ms", timer.elapsedMilliseconds());
