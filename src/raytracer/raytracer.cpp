@@ -1,11 +1,19 @@
 #include "raytracer.h"
 
+int Raytracer::samples_per_pixel{};
+int Raytracer::max_depth{};
+
 // CONSTRUCTOR
 
 Raytracer::Raytracer() {
     initialize();
     preview_image = Image{};
     image = Image{};
+
+    // Raytracer parameters
+    samples_per_pixel = 100;
+    max_depth = 50;
+
     setup_scene();
 }
 
@@ -26,19 +34,57 @@ const std::vector<std::uint32_t> &Raytracer::getImage() const {
 }
 
 void Raytracer::setup_scene() {
-    world.add(std::make_shared<sphere>(point3(0,0,-1), 0.5));
-    world.add(std::make_shared<sphere>(point3(0,-100.5,-1), 100));
+    auto ground_material = std::make_shared<lambertian>(color(0.5, 0.5, 0.5));
+    world.add(std::make_shared<sphere>(point3(0,-1000,0), 1000, ground_material));
+
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            auto choose_mat = random_float();
+            point3 center(a + 0.9*random_float(), 0.2, b + 0.9*random_float());
+
+            if ((center - point3(4, 0.2, 0)).length() > 0.9) {
+                std::shared_ptr<material> sphere_material;
+
+                if (choose_mat < 0.8) {
+                    // diffuse
+                    auto albedo = color::random() * color::random();
+                    sphere_material = std::make_shared<lambertian>(albedo);
+                    world.add(std::make_shared<sphere>(center, 0.2, sphere_material));
+                } else if (choose_mat < 0.95) {
+                    // metal
+                    auto albedo = color::random(0.5, 1);
+                    auto fuzz = random_float(0, 0.5);
+                    sphere_material = std::make_shared<metal>(albedo, fuzz);
+                    world.add(std::make_shared<sphere>(center, 0.2, sphere_material));
+                } else {
+                    // glass
+                    sphere_material = std::make_shared<dielectric>(1.5);
+                    world.add(std::make_shared<sphere>(center, 0.2, sphere_material));
+                }
+            }
+        }
+    }
+
+    auto material1 = std::make_shared<dielectric>(1.5);
+    world.add(std::make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
+
+    auto material2 = std::make_shared<lambertian>(color(0.4, 0.2, 0.1));
+    world.add(std::make_shared<sphere>(point3(-4, 1, 0), 1.0, material2));
+
+    auto material3 = std::make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
+    world.add(std::make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
+
 }
 
 void Raytracer::render_preview() {
     for (int i = 0; i < Image::getImageHeight(); ++i) {
         for (int j = 0; j < Image::getImageWidth(); ++j) {
             color pixel_color{0,0,0};
-            for (int sample = 0; sample < Image::getSamplesPerPixel(); ++sample) {
+            for (int sample = 0; sample < samples_per_pixel; ++sample) {
                 ray sampling_ray_direction = get_sampling_ray(i, j);
-                pixel_color += ray_color(sampling_ray_direction);
+                pixel_color += ray_color(sampling_ray_direction, max_depth);
             }
-            pixel_color /= static_cast<float>(Image::getSamplesPerPixel());
+            pixel_color /= static_cast<float>(samples_per_pixel);
 
             // Color the pixel
             int index = i*Image::getImageWidth() + j;
@@ -48,11 +94,18 @@ void Raytracer::render_preview() {
 }
 
 
-color Raytracer::ray_color(const ray &r) const {
+color Raytracer::ray_color(const ray &r, const int& depth) const {
+    if (depth <= 0) {
+        return {0, 0, 0};
+    }
 
-    if (hit_record rec; world.hit(r, interval(0, infinity), rec)) {
-        const vec3 direction = random_on_hemisphere(rec.normal);
-        return 0.4 * ray_color(ray(rec.p, direction));
+    if (hit_record rec; world.hit(r, interval(0.001, infinity), rec)) {
+        ray scattered;
+        color attenuation;
+        if (rec.mat->scatter(r, rec, attenuation, scattered)) {
+            return attenuation * ray_color(scattered, depth - 1);
+        }
+        return {0, 0, 0};
     }
 
     const vec3 unit_direction = unit_vector(r.direction());
@@ -74,10 +127,15 @@ ray Raytracer::get_sampling_ray(const int &i, const int &j) {
             + ((static_cast<float>(j) + offset.x()) * Viewport::getPixelDeltaU());
 
     // Direction from camera to evaluated pixel
-    auto ray_direction =
-            pixel_sample
-            - Camera::getCameraCenter();
+    const auto ray_origin = (Camera::getDefocusAngle() <= 0)? Camera::getCameraCenter(): defocus_disk_sample();
+    auto ray_direction = pixel_sample - ray_origin;
 
     // Ray directed to pixel
-    return {Camera::getCameraCenter(), ray_direction};
+    return {ray_origin, ray_direction};
+}
+
+point3 Raytracer::defocus_disk_sample() {
+    // Returns a random point in the camera defocus disk.
+    auto p = random_in_unit_disk();
+    return Camera::getCameraCenter() + (p[0] * Viewport::getDefocusDiskU()) + (p[1] * Viewport::getDefocusDiskV());
 }

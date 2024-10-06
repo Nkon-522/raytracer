@@ -1,14 +1,19 @@
 #ifndef RAYTRACER_HITTABLE_H
 #define RAYTRACER_HITTABLE_H
 
+#include <memory>
+
 #include "utilities/vec3.h"
 #include "utilities/ray.h"
 #include "utilities/interval.h"
+
+class material;
 
 class hit_record {
 public:
     point3 p;
     vec3 normal;
+    std::shared_ptr<material> mat;
     float t;
     bool front_face;
 
@@ -19,7 +24,9 @@ public:
 class hittable {
 public:
     virtual ~hittable();
-    virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;
+    virtual bool hit(
+        const ray& r, interval ray_t, hit_record& rec
+    ) const = 0;
 };
 
 #endif //RAYTRACER_HITTABLE_H

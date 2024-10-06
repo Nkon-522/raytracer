@@ -21,6 +21,10 @@ private:
     static point3 viewport_upper_left;
     static point3 pixel00_loc;
 
+    // Defocus disk vertical radius
+    static vec3 defocus_disk_u;
+    static vec3 defocus_disk_v;
+
 public:
     enum class SetupType;
 
@@ -32,6 +36,8 @@ public:
     static vec3 getPixelDeltaV();
     static const point3& getViewportUpperLeft();
     static point3 getPixel00Location();
+    static vec3 getDefocusDiskU();
+    static vec3 getDefocusDiskV();
 
     static void setViewportHeight(float viewportHeight);
     static void setViewportWidth(float viewportWidth);
@@ -42,6 +48,8 @@ private:
     static void setPixelDeltaV(const vec3 &pixelDeltaV);
     static void setViewportUpperLeft(const point3 &viewportUpperLeft);
     static void setPixel00Loc(const point3 &pixel00Loc);
+    static void setDefocusDiskU(const vec3 &defocusDiskU);
+    static void setDefocusDiskV(const vec3 &defocusDiskV);
 public:
     static void initialize();
     static void setup(const SetupType& type);

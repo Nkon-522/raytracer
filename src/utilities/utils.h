@@ -29,4 +29,12 @@ inline float random_float(const float& min, const float& max) {
     return min + (max - min) * random_float();
 }
 
+inline float linear_to_gamma(float linear_component)
+{
+    if (linear_component > 0)
+        return std::sqrt(linear_component);
+
+    return 0;
+}
+
 #endif //RAYTRACER_UTILS_H

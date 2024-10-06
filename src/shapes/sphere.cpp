@@ -1,7 +1,10 @@
 #include "sphere.h"
 
+#include <utility>
+
 // CONSTRUCTOR
-sphere::sphere(const point3 &center, float radius): center{center}, radius{fmaxf(0,radius)} {}
+sphere::sphere(const point3 &center, const float radius, std::shared_ptr<material> mat): center{center}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {
+}
 
 // METHODS
 bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
@@ -28,6 +31,7 @@ bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
     rec.p = r.at(rec.t);
     const vec3 outward_normal = (rec.p - center) / radius;
     rec.set_face_normal(r, outward_normal);
+    rec.mat = mat;
 
     return true;
 }

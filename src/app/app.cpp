@@ -164,7 +164,7 @@ void App::set_render_ImGui() {
         ImGui::Text("Image height: %d", Image::getImageHeight());
 
         ImGui::Text(""); ImGui::Text("CAMERA PARAMETERS");
-        ImGui::Text("Focal Length: %.3f", Camera::getFocalLength());
+        ImGui::Text("Focus Distance: %.3f", Camera::getFocusDist());
         ImGui::Text("Camera Center: point3(%.3f, %.3f, %.3f)",
                     Camera::getCameraCenter().x(),
                     Camera::getCameraCenter().y(),

@@ -1,10 +1,8 @@
 # include "image.h"
 
-
 float Image::aspect_ratio{};
 int Image::image_width{};
 int Image::image_height{};
-int Image::samples_per_pixel{};
 
 // CONSTRUCTOR
 Image::Image():img{std::vector<std::uint32_t>(image_width*image_height, 0U)} {}
@@ -14,7 +12,6 @@ enum class Image::SetupType {
     IMAGE_HEIGHT,
     IMAGE_WIDTH
 };
-
 
 // METHODS
 const std::vector<std::uint32_t> &Image::getImg() const {
@@ -29,10 +26,6 @@ int Image::getImageHeight() {
     return image_height;
 }
 
-int Image::getSamplesPerPixel() {
-    return samples_per_pixel;
-}
-
 void Image::setImageWidth(const int imageWidth) {
     image_width = imageWidth;
 }
@@ -45,14 +38,9 @@ void Image::setAspectRatio(const float aspectRatio) {
     aspect_ratio = aspectRatio;
 }
 
-void Image::setSamplesPerPixel(const int samplesPerPixel) {
-    samples_per_pixel = samplesPerPixel;
-}
-
 void Image::initialize() {
     setAspectRatio(16.0 / 9.0);
     setImageWidth(400);
-    setSamplesPerPixel(10);
     setup(SetupType::IMAGE_HEIGHT);
 }
 
@@ -73,9 +61,13 @@ void Image::setup(const SetupType& type) {
 }
 
 void Image::write_color(const int &index, const color &pixel_color) {
-    const auto r = pixel_color.x();
-    const auto g = pixel_color.y();
-    const auto b = pixel_color.z();
+    auto r = pixel_color.x();
+    auto g = pixel_color.y();
+    auto b = pixel_color.z();
+
+    r = linear_to_gamma(r);
+    g = linear_to_gamma(g);
+    b = linear_to_gamma(b);
 
     // Translate the [0,1] component values to the byte range [0,255].
     static const interval intensity(0.000, 0.999);

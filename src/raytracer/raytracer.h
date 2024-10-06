@@ -3,6 +3,8 @@
 
 #include "utilities/utils.h"
 
+#include "material/material.h"
+
 #include "shapes/hittable.h"
 #include "shapes/hittable_list.h"
 #include "shapes/sphere.h"
@@ -12,7 +14,6 @@
 
 class Raytracer {
 
-
 private:
     Image preview_image;
     Image image;
@@ -21,8 +22,12 @@ private:
     static void initialize();
     void setup_scene();
 
-    [[nodiscard]] color ray_color(const ray& r) const;
+    static int samples_per_pixel;
+    static int max_depth;
+
+    [[nodiscard]] color ray_color(const ray& r,const int& depth) const;
     [[nodiscard]] static ray get_sampling_ray(const int& i, const int& j);
+    [[nodiscard]] static point3 defocus_disk_sample();
 public:
     Raytracer();
     [[nodiscard]] const std::vector<std::uint32_t> &getPreviewImage() const;
