@@ -3,12 +3,13 @@
 #include <utility>
 
 // CONSTRUCTOR
-sphere::sphere(const point3 &center, const float radius, std::shared_ptr<material> mat): center{center}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {
-}
+sphere::sphere(const point3 &static_center, const float radius, std::shared_ptr<material> mat): center{static_center, {0,0,0}}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {}
+sphere::sphere(const point3 &center1, const point3 &center2, const float radius, std::shared_ptr<material> mat): center{center1, center2 - center1}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {}
 
 // METHODS
 bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
-    const vec3 oc = center - r.origin();
+    const point3 current_center = center.at(r.time());
+    const vec3 oc = current_center - r.origin();
     const auto a = r.direction().length_squared();
     const auto h = dot(r.direction(), oc);
     const auto c = oc.length_squared() - radius*radius;
@@ -29,7 +30,7 @@ bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
 
     rec.t = root;
     rec.p = r.at(rec.t);
-    const vec3 outward_normal = (rec.p - center) / radius;
+    const vec3 outward_normal = (rec.p - current_center) / radius;
     rec.set_face_normal(r, outward_normal);
     rec.mat = mat;
 

@@ -7,11 +7,12 @@
 
 class sphere final : public hittable {
 private:
-    point3 center;
+    ray center;
     float radius;
     std::shared_ptr<material> mat;
 public:
-    sphere(const point3& center, float radius, std::shared_ptr<material> mat);
+    sphere(const point3& static_center, float radius, std::shared_ptr<material> mat);
+    sphere(const point3& center1, const point3& center2, float radius, std::shared_ptr<material> mat);
     bool hit(const ray& r, interval ray_t, hit_record& rec) const override;
 };
 

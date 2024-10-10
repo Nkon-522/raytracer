@@ -49,7 +49,8 @@ void Raytracer::setup_scene() {
                     // diffuse
                     auto albedo = color::random() * color::random();
                     sphere_material = std::make_shared<lambertian>(albedo);
-                    world.add(std::make_shared<sphere>(center, 0.2, sphere_material));
+                    auto center2 = center + vec3(0, random_float(0,.5), 0);
+                    world.add(std::make_shared<sphere>(center, center2, 0.2, sphere_material));
                 } else if (choose_mat < 0.95) {
                     // metal
                     auto albedo = color::random(0.5, 1);
@@ -129,9 +130,10 @@ ray Raytracer::get_sampling_ray(const int &i, const int &j) {
     // Direction from camera to evaluated pixel
     const auto ray_origin = (Camera::getDefocusAngle() <= 0)? Camera::getCameraCenter(): defocus_disk_sample();
     auto ray_direction = pixel_sample - ray_origin;
+    auto ray_time = random_float();
 
     // Ray directed to pixel
-    return {ray_origin, ray_direction};
+    return {ray_origin, ray_direction, ray_time};
 }
 
 point3 Raytracer::defocus_disk_sample() {
