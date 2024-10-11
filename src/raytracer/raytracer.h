@@ -7,6 +7,7 @@
 
 #include "shapes/hittable.h"
 #include "shapes/hittable_list.h"
+#include "shapes/bvh.h"
 #include "shapes/sphere.h"
 
 #include "image.h"

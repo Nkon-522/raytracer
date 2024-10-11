@@ -1,10 +1,21 @@
 #include "sphere.h"
 
 #include <utility>
+#include <sys/stat.h>
 
 // CONSTRUCTOR
-sphere::sphere(const point3 &static_center, const float radius, std::shared_ptr<material> mat): center{static_center, {0,0,0}}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {}
-sphere::sphere(const point3 &center1, const point3 &center2, const float radius, std::shared_ptr<material> mat): center{center1, center2 - center1}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {}
+sphere::sphere(const point3 &static_center, const float radius, std::shared_ptr<material> mat):
+    center{static_center, {0,0,0}}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {
+    auto rvec = vec3{radius, radius, radius};
+    bbox = {static_center - rvec, static_center + rvec};
+}
+sphere::sphere(const point3 &center1, const point3 &center2, const float radius, std::shared_ptr<material> mat):
+    center{center1, center2 - center1}, radius{fmaxf(0,radius)}, mat{std::move(mat)} {
+    auto rvec = vec3{radius, radius, radius};
+    const aabb box1{center.at(0) - rvec, center.at(0) + rvec};
+    const aabb box2{center.at(1) - rvec, center.at(1) + rvec};
+    bbox = aabb{box1, box2};
+}
 
 // METHODS
 bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
@@ -35,6 +46,10 @@ bool sphere::hit(const ray &r, const interval ray_t, hit_record &rec) const {
     rec.mat = mat;
 
     return true;
+}
+
+aabb sphere::bounding_box() const {
+    return bbox;
 }
 
 

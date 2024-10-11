@@ -4,9 +4,11 @@
 #include <memory>
 #include <vector>
 
+#include "utilities/aabb.h"
 #include "hittable.h"
 
-class hittable_list : public hittable {
+class hittable_list final : public hittable {
+    aabb bbox;
 public:
     std::vector<std::shared_ptr<hittable>> objects;
 
@@ -15,7 +17,7 @@ public:
     void clear();
     void add(const std::shared_ptr<hittable>& object);
     bool hit(const ray& r, interval ray_t, hit_record& rec) const override;
-
+    [[nodiscard]] aabb bounding_box() const override;
 };
 
 #endif //RAYTRACER_HITTABLE_LIST_H

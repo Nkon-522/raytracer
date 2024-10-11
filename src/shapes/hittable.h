@@ -6,6 +6,7 @@
 #include "utilities/vec3.h"
 #include "utilities/ray.h"
 #include "utilities/interval.h"
+#include "utilities/aabb.h"
 
 class material;
 
@@ -27,6 +28,7 @@ public:
     virtual bool hit(
         const ray& r, interval ray_t, hit_record& rec
     ) const = 0;
+    [[nodiscard]] virtual aabb bounding_box() const = 0;
 };
 
 #endif //RAYTRACER_HITTABLE_H

@@ -75,6 +75,7 @@ void Raytracer::setup_scene() {
     auto material3 = std::make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
     world.add(std::make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
 
+    world = hittable_list(std::make_shared<bvh_node>(world));
 }
 
 void Raytracer::render_preview() {

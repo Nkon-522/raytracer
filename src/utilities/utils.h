@@ -29,12 +29,16 @@ inline float random_float(const float& min, const float& max) {
     return min + (max - min) * random_float();
 }
 
-inline float linear_to_gamma(float linear_component)
+inline float linear_to_gamma(const float& linear_component)
 {
     if (linear_component > 0)
         return std::sqrt(linear_component);
 
     return 0;
+}
+
+inline int random_int(const int& min, const int& max) {
+    return static_cast<int>(random_float(static_cast<float>(min), static_cast<float>(max) + 1));
 }
 
 #endif //RAYTRACER_UTILS_H
